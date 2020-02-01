@@ -1,6 +1,11 @@
 # snirin_infra
 snirin Infra repository
 
+ДЗ 6 cloud-testapp
+testapp_IP = 34.89.145.106
+testapp_port = 9292
+
+
 
 ДЗ 5 cloud-bastion
 bastion_IP = 35.195.142.20
@@ -28,3 +33,6 @@ Host someinternalhost
 HostName someinternalhost
 User appuser
 ProxyCommand ssh -W %h:%p appuser@35.195.142.20
+
+###### How to add let's encrypt certificate to our vpn-server:
+- just go to "settings" in our pritunl web interface and add `<bastion-ext-ip>.sslip.io` to "let's encrypt domain" field, then reopen your pritunl web interface in browser using `<bastion-ext-ip>.sslip.io` instead of `<bastion-ext-ip>`
