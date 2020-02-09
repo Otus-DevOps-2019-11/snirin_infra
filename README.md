@@ -2,10 +2,27 @@
 snirin Infra repository
 
 ДЗ 6 cloud-testapp
-testapp_IP = 34.89.145.106
+testapp_IP = 35.233.127.3
 testapp_port = 9292
 
+Создание инстанса со startup скриптом
+gcloud compute instances create reddit-app1 \
+ --boot-disk-size=10GB \
+ --image-family ubuntu-1604-lts \
+ --image-project=ubuntu-os-cloud \
+ --machine-type=g1-small \
+ --tags puma-server \
+ --metadata-from-file startup-script=startup.sh
 
+Правило файервола
+gcloud compute --project=infra-265807 firewall-rules create default-puma-server2 \
+ --direction=INGRESS \
+ --priority=1000 \
+ --network=default \
+ --action=ALLOW \
+ --rules=tcp:80 \
+ --source-ranges=0.0.0.0 \
+ --target-tags=puma-server
 
 ДЗ 5 cloud-bastion
 bastion_IP = 35.195.142.20
