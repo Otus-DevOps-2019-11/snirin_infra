@@ -24,6 +24,9 @@ gcloud compute --project=infra-265807 firewall-rules create default-puma-server2
  --source-ranges=0.0.0.0 \
  --target-tags=puma-server
 
+Для проверка перейти по
+35.233.127.3:9292
+
 ДЗ 5 cloud-bastion
 bastion_IP = 35.195.142.20
 someinternalhost_IP = 10.132.0.4
