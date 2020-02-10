@@ -1,6 +1,31 @@
 # snirin_infra
 snirin Infra repository
 
+ДЗ 6 cloud-testapp
+testapp_IP = 35.233.127.3
+testapp_port = 9292
+
+Создание инстанса со startup скриптом
+gcloud compute instances create reddit-app1 \
+ --boot-disk-size=10GB \
+ --image-family ubuntu-1604-lts \
+ --image-project=ubuntu-os-cloud \
+ --machine-type=g1-small \
+ --tags puma-server \
+ --metadata-from-file startup-script=startup.sh
+
+Правило файервола
+gcloud compute --project=infra-265807 firewall-rules create default-puma-server2 \
+ --direction=INGRESS \
+ --priority=1000 \
+ --network=default \
+ --action=ALLOW \
+ --rules=tcp:80 \
+ --source-ranges=0.0.0.0 \
+ --target-tags=puma-server
+
+Для проверка перейти по
+35.233.127.3:9292
 
 ДЗ 5 cloud-bastion
 bastion_IP = 35.195.142.20
@@ -28,3 +53,6 @@ Host someinternalhost
 HostName someinternalhost
 User appuser
 ProxyCommand ssh -W %h:%p appuser@35.195.142.20
+
+###### How to add let's encrypt certificate to our vpn-server:
+- just go to "settings" in our pritunl web interface and add `<bastion-ext-ip>.sslip.io` to "let's encrypt domain" field, then reopen your pritunl web interface in browser using `<bastion-ext-ip>.sslip.io` instead of `<bastion-ext-ip>`
