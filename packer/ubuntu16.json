@@ -1,15 +1,14 @@
 {
-	"variables": {
-	"project_id": null,
-	"source_image_family": null,
-
-	"machine_type": "f1-micro",
-    "image_description": "my image description",
-    "disk_size": "15",
-    "disk_type": "{{user `disk_type`}}",
-    "network": "{{user `network`}}",
-    "tags": "my_tag"
-	},
+   "variables": {
+      "project_id": null,
+      "source_image_family": null,
+      "machine_type": "f1-micro",
+      "image_description": "my image description",
+      "disk_size": "15",
+      "disk_type": "{{user `disk_type`}}",
+      "network": "{{user `network`}}",
+      "tags": "my_tag"
+    },
 
     "builders": [
         {
@@ -33,12 +32,12 @@
     "provisioners": [
         {
             "type": "shell",
-            "script": "../config-scripts/install_ruby.sh",
+            "script": "config-scripts/install_ruby.sh",
             "execute_command": "sudo {{.Path}}"
         },
         {
             "type": "shell",
-            "script": "../config-scripts/install_mongodb.sh",
+            "script": "config-scripts/install_mongodb.sh",
             "execute_command": "sudo {{.Path}}"
         }
     ]
