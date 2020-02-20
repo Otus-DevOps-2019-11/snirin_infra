@@ -1,6 +1,16 @@
 # snirin_infra
 snirin Infra repository
 
+ДЗ 7 packer-base
+Создание базового образа
+packer build -var-file=variables.json ubuntu16.json
+Создание полного образа
+PACKER_LOG=1 packer build -var-file=variables.json immutable.json
+Деплой приложение из полного образа
+packer/config-scripts/create-redditvm.sh
+или командой
+gcloud compute instances create reddit-app --image-family=reddit-full --tags puma-server --machine-type=g1-small
+
 ДЗ 6 cloud-testapp
 testapp_IP = 35.233.127.3
 testapp_port = 9292
@@ -15,12 +25,12 @@ gcloud compute instances create reddit-app1 \
  --metadata-from-file startup-script=startup.sh
 
 Правило файервола
-gcloud compute --project=infra-265807 firewall-rules create default-puma-server2 \
+gcloud compute --project=infra-265807 firewall-rules create default-puma-server \
  --direction=INGRESS \
  --priority=1000 \
  --network=default \
  --action=ALLOW \
- --rules=tcp:80 \
+ --rules=tcp:9292 \
  --source-ranges=0.0.0.0 \
  --target-tags=puma-server
 
