@@ -1,6 +1,10 @@
 # snirin_infra
 snirin Infra repository
 
+ДЗ 8 terraform-1
+При редактировании ключей shh в метаданных проекта через google_compute_project_metadata или google_compute_project_metadata_item,
+нужно указывать все ключи, которые должны остаться, иначе они будут затерты
+
 ДЗ 7 packer-base
 Создание базового образа
 packer build -var-file=variables.json ubuntu16.json
