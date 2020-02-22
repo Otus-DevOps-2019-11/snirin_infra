@@ -5,6 +5,28 @@ snirin Infra repository
 При редактировании ключей shh в метаданных проекта через google_compute_project_metadata или google_compute_project_metadata_item,
 нужно указывать все ключи, которые должны остаться, иначе они будут затерты
 
+Сделано два инстанса и создан балансер в lb.tf через команды
+google_compute_http_health_check
+google_compute_target_pool
+google_compute_forwarding_rule
+
+Добавлены две output переменные
+reddit_app_external_ips
+reddit_app_load_balancing_ip
+
+Для себя
+terraform help
+terraform init
+terraform plan
+terraform apply
+terraform destroy
+terraform show
+
+Проверка
+В папке terraform выполнить terraform apply
+И по адресам из reddit_app_external_ip и reddit_app_load_balancing_ip на порту 9292 буде доступно приложение
+34.76.137.236:9292
+
 ДЗ 7 packer-base
 Создание базового образа
 packer build -var-file=variables.json ubuntu16.json

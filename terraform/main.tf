@@ -15,11 +15,12 @@ provider "google" {
   region  = var.region
 }
 
-resource "google_compute_instance" "app" {
-  name         = "reddit-app"
+resource "google_compute_instance" "reddit-app" {
+  name         = "reddit-app${count.index}"
   machine_type = "g1-small"
   zone         = var.zone
   tags         = ["reddit-app"]
+  count        = var.inctances_count
   boot_disk {
     initialize_params {
       #image = "reddit-base"
