@@ -30,7 +30,9 @@ resource "google_compute_instance" "reddit-app" {
 
   network_interface {
     network = "default"
-    access_config {}
+    access_config {
+      nat_ip = google_compute_address.app_ip.address
+    }
   }
 
   metadata = {
@@ -80,4 +82,21 @@ resource "google_compute_project_metadata_item" "ssh-keys" {
   ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDXsiM/gv6CPEtu+7DDc3QDqbJrJ//Fg+Bk2b7mwrK9O7+s9PuKVK70kghJM7GE/ooMdclPL2SUMnsmOKGxOVakJbej1RM1HIyNPu+X3N1AWsIoaeG/sKnkhuDzizDNQXeEoX94NKPbOBC5pWVUk9p++0PLUAlFOpdERypKP//I71fRIe1EQrpB7VjDeTOEjOawrWGSNJUWkMjrFhyyD1ENqO2BRUXctGdZmsGcCpn1idhNgv59a7woJk632i0Y1hB8QdTVgarVVYczJCd7ObEICFZ1O+Lwa9CaVxClCRrKrOtMBpauVeJSRoIpJ9lNKcyV5dgCOf1MbFM7G+tiYMhb appuser1
 ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDXsiM/gv6CPEtu+7DDc3QDqbJrJ//Fg+Bk2b7mwrK9O7+s9PuKVK70kghJM7GE/ooMdclPL2SUMnsmOKGxOVakJbej1RM1HIyNPu+X3N1AWsIoaeG/sKnkhuDzizDNQXeEoX94NKPbOBC5pWVUk9p++0PLUAlFOpdERypKP//I71fRIe1EQrpB7VjDeTOEjOawrWGSNJUWkMjrFhyyD1ENqO2BRUXctGdZmsGcCpn1idhNgv59a7woJk632i0Y1hB8QdTVgarVVYczJCd7ObEICFZ1O+Lwa9CaVxClCRrKrOtMBpauVeJSRoIpJ9lNKcyV5dgCOf1MbFM7G+tiYMhb appuser2
   EOF
+}
+
+resource "google_compute_firewall" "firewall_ssh" {
+  name        = "default-allow-ssh"
+  network     = "default"
+  description = "Allow SSH from anywhere"
+
+  allow {
+    protocol = "tcp"
+    ports    = ["22"]
+  }
+
+  source_ranges = ["0.0.0.0/0"]
+}
+
+resource "google_compute_address" "app_ip" {
+  name = "reddit-app-ip"
 }
