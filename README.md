@@ -1,6 +1,18 @@
 # snirin_infra
 snirin Infra repository
 
+ДЗ 9 terraform-2
+
+Для себя
+Импорт созданного правила файервола
+terraform import google_compute_firewall.firewall_ssh default-allow-ssh
+Для работы с монгой на инстансе
+export LC_ALL=C
+Список бакетов
+gsutil ls
+https://console.cloud.google.com/storage
+
+
 ДЗ 8 terraform-1
 При редактировании ключей shh в метаданных проекта через google_compute_project_metadata или google_compute_project_metadata_item,
 нужно указывать все ключи, которые должны остаться, иначе они будут затерты
@@ -21,9 +33,15 @@ terraform plan
 terraform apply
 terraform destroy
 terraform show
+terraform taint module.db.google_compute_instance.db
+terraform fmt -recursive
+terraform validate
+terraform console
+TF_LOG="DEBUG"
+TF_LOG_FILE
 
 Проверка
-В папке terraform выполнить terraform apply
+В папке terraform (в ветке из пулреквеста terraform-1) выполнить terraform apply, в проекте должен быть открыт 22 порт для ssh (в новом проекте открыт по умолчанию)
 И по адресам из reddit_app_external_ip и reddit_app_load_balancing_ip на порту 9292 буде доступно приложение
 34.76.137.236:9292
 
