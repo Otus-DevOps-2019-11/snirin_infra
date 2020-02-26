@@ -2,6 +2,9 @@
 snirin Infra repository
 
 ДЗ 9 terraform-2
+Сделано два окружения prod и stage
+Добавлены provisioners
+State вынесен в backet
 
 Для себя
 Импорт созданного правила файервола
