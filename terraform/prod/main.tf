@@ -27,7 +27,7 @@ module "db" {
   zone               = var.zone
   db_disk_image      = var.db_disk_image
   env_type           = "prod"
-  modules_depends_on = [modules.vpc]
+  modules_depends_on = [module.vpc]
   use_provisioners   = true
 }
 
