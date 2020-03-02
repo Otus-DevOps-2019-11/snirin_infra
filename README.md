@@ -1,6 +1,12 @@
 # snirin_infra
 snirin Infra repository
 
+ДЗ 10 ansible-1
+После команды ansible app -m command -a 'rm -rf ~/reddit' удаляется католог с репозиторием и выполнение плейбука ansible-playbook clone.yml клонирует его заново
+
+Созданы файлы inventory.json и inventory.sh, последний прописан в ansible.cfg.
+Команда ansible all -m ping выполняется успешно
+
 ДЗ 9 terraform-2
 Сделано два окружения prod и stage
 Добавлены provisioners
