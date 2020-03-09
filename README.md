@@ -1,6 +1,8 @@
 # snirin_infra
 snirin Infra repository
 
+ДЗ 11 ansible-2
+
 ДЗ 10 ansible-1
 После команды ansible app -m command -a 'rm -rf ~/reddit' удаляется католог с репозиторием и выполнение плейбука ansible-playbook clone.yml клонирует его заново
 
@@ -11,16 +13,6 @@ snirin Infra repository
 Сделано два окружения prod и stage
 Добавлены provisioners
 State вынесен в backet
-
-Для себя
-Импорт созданного правила файервола
-terraform import google_compute_firewall.firewall_ssh default-allow-ssh
-Для работы с монгой на инстансе
-export LC_ALL=C
-Список бакетов
-gsutil ls
-https://console.cloud.google.com/storage
-
 
 ДЗ 8 terraform-1
 При редактировании ключей shh в метаданных проекта через google_compute_project_metadata или google_compute_project_metadata_item,
@@ -34,20 +26,6 @@ google_compute_forwarding_rule
 Добавлены две output переменные
 reddit_app_external_ips
 reddit_app_load_balancing_ip
-
-Для себя
-terraform help
-terraform init
-terraform plan
-terraform apply
-terraform destroy
-terraform show
-terraform taint module.db.google_compute_instance.db
-terraform fmt -recursive
-terraform validate
-terraform console
-TF_LOG="DEBUG"
-TF_LOG_FILE
 
 Проверка
 В папке terraform (в ветке из пулреквеста terraform-1) выполнить terraform apply, в проекте должен быть открыт 22 порт для ssh (в новом проекте открыт по умолчанию)
@@ -119,3 +97,64 @@ ProxyCommand ssh -W %h:%p appuser@35.195.142.20
 
 ###### How to add let's encrypt certificate to our vpn-server:
 - just go to "settings" in our pritunl web interface and add `<bastion-ext-ip>.sslip.io` to "let's encrypt domain" field, then reopen your pritunl web interface in browser using `<bastion-ext-ip>.sslip.io` instead of `<bastion-ext-ip>`
+
+Полезное
+
+Импорт созданного правила файервола
+terraform import google_compute_firewall.firewall_ssh default-allow-ssh
+Для работы с монгой на инстансе
+export LC_ALL=C
+Список бакетов
+gsutil ls
+https://console.cloud.google.com/storage
+
+Проверка монги
+ssh appuser@34.77.204.59 sudo systemctl status mongod
+mongo 34.77.204.59 (Должна быть закомментирована строчка #source_tags = ["reddit-app"] при создании файервола для монги)
+
+nmap -Pn 10.132.0.63   (?)
+netstat -plunt
+ss -nlp | grep 27017
+netstat -apn | grep 27017
+sudo lsof -nPi | grep 9292
+
+packer build -var 'project_id=aaaa-123' packer_example.json
+packer build -var-file variables.json packer_example.json
+packer validate -var 'project_id=aaaa-123' packer_example.json
+packer inspect packer_example.json
+
+terraform help
+terraform init
+terraform plan
+terraform apply
+terraform destroy
+terraform show
+terraform output
+terraform taint module.db.google_compute_instance.db
+terraform fmt -recursive
+terraform validate
+terraform console
+TF_LOG="DEBUG"
+TF_LOG_FILE
+
+pip install -r requirements.txt
+ansible appserver -i ./inventory -m ping
+ansible all -m ping -i inventory.yml
+ansible dbserver -m command -a uptime
+ansible app -m command -a 'ruby -v'
+ansible app -m shell -a 'ruby -v; bundler -v'
+ansible db -m command -a 'systemctl status mongod'
+ansible db -m systemd -a name=mongod
+ansible db -m service -a name=mongod
+ansible app -m command -a 'git clone https://github.com/express42/reddit.git /home/appuser/reddit'
+ansible app -m command -a 'rm -rf ~/reddit'
+ansible-playbook main.yml
+ansible-playbook reddit_app.yml --check --limit db
+ansible-playbook reddit_app2.yml --tags deploy-tag
+ansible-playbook -i path/to/inventories main.yml
+ansible-vault --vault-id dev@prompt encrypt --encrypt-vault-id dev secrets.yml
+ansible-playbook myplaybook.yml --ask-vault-pass
+ansible -m ping localhost -vvvv
+ansible-console -l balancer
+ANSIBLE_ENABLE_TASK_DEBUGGER=True ansible-playbook -i hosts site.yml
+ansible-playbook main.yml --step

@@ -17,7 +17,7 @@ module "app" {
   env_type           = "stage"
   db_url             = "${module.db.db_internal_ip}"
   modules_depends_on = [module.vpc, module.db]
-  use_provisioners   = true
+  use_provisioners   = false
 }
 
 module "db" {
@@ -28,7 +28,7 @@ module "db" {
   db_disk_image      = var.db_disk_image
   env_type           = "stage"
   modules_depends_on = [module.vpc]
-  use_provisioners   = true
+  use_provisioners   = false
 }
 
 module "vpc" {
