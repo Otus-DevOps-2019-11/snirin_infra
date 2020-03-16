@@ -6,3 +6,4 @@ packer/variables.json
 .terraform/
 .idea
 *.retry
+notes.txt

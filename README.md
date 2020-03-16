@@ -111,6 +111,7 @@ https://console.cloud.google.com/storage
 Проверка монги
 ssh appuser@34.77.204.59 sudo systemctl status mongod
 mongo 34.77.204.59 (Должна быть закомментирована строчка #source_tags = ["reddit-app"] при создании файервола для монги)
+ssh appuser@35.233.7.135 cat /home/appuser/db_config //todo change to output
 
 nmap -Pn 10.132.0.63   (?)
 netstat -plunt
@@ -128,6 +129,7 @@ terraform init
 terraform plan
 terraform apply
 terraform destroy
+terraform destroy -auto-approve=true && terraform apply -auto-approve=true
 terraform show
 terraform output
 terraform taint module.db.google_compute_instance.db
@@ -140,6 +142,7 @@ TF_LOG_FILE
 pip install -r requirements.txt
 ansible appserver -i ./inventory -m ping
 ansible all -m ping -i inventory.yml
+ansible all -m ping
 ansible dbserver -m command -a uptime
 ansible app -m command -a 'ruby -v'
 ansible app -m shell -a 'ruby -v; bundler -v'
@@ -148,13 +151,28 @@ ansible db -m systemd -a name=mongod
 ansible db -m service -a name=mongod
 ansible app -m command -a 'git clone https://github.com/express42/reddit.git /home/appuser/reddit'
 ansible app -m command -a 'rm -rf ~/reddit'
-ansible-playbook main.yml
 ansible-playbook reddit_app.yml --check --limit db
 ansible-playbook reddit_app2.yml --tags deploy-tag
 ansible-playbook -i path/to/inventories main.yml
+ansible-playbook site.yml
 ansible-vault --vault-id dev@prompt encrypt --encrypt-vault-id dev secrets.yml
 ansible-playbook myplaybook.yml --ask-vault-pass
 ansible -m ping localhost -vvvv
 ansible-console -l balancer
 ANSIBLE_ENABLE_TASK_DEBUGGER=True ansible-playbook -i hosts site.yml
 ansible-playbook main.yml --step
+ansible-inventory --list -i old/test.gcp.yml
+./inventory.sh --list
+time sh -c 'cd ../terraform/stage && terraform destroy -auto-approve=true && terraform apply -auto-approve=true && cd ../../ansible && ansible-playbook site.yml'
+
+В дебаге ансибла (когда strategy: debug) https://docs.ansible.com/ansible/latest/user_guide/playbooks_debugger.html
+p task
+p task_vars
+p task.args
+p vars
+p task_vars
+p task_vars['db']['vars']['internal_ip']
+r
+q
+
+Файл notes.txt
