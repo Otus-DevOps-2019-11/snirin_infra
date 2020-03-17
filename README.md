@@ -95,7 +95,7 @@ HostName someinternalhost
 User appuser
 ProxyCommand ssh -W %h:%p appuser@35.195.142.20
 
-###### How to add let's encrypt certificate to our vpn-server:
+How to add let's encrypt certificate to our vpn-server:
 - just go to "settings" in our pritunl web interface and add `<bastion-ext-ip>.sslip.io` to "let's encrypt domain" field, then reopen your pritunl web interface in browser using `<bastion-ext-ip>.sslip.io` instead of `<bastion-ext-ip>`
 
 Полезное
@@ -113,16 +113,35 @@ ssh appuser@34.77.204.59 sudo systemctl status mongod
 mongo 34.77.204.59 (Должна быть закомментирована строчка #source_tags = ["reddit-app"] при создании файервола для монги)
 ssh appuser@35.233.7.135 cat /home/appuser/db_config //todo change to output
 
+Для просмотра системных логов
+dmesg | grep puma
+
 nmap -Pn 10.132.0.63   (?)
 netstat -plunt
 ss -nlp | grep 27017
 netstat -apn | grep 27017
 sudo lsof -nPi | grep 9292
 
+gcloud auth application-default login
+gcloud projects list
+gcloud compute instances create instance-8 --image=reddit-full-1581661026
+gcloud compute images list
+gcloud compute instances list
+gcloud compute instances create reddit-app\
+  --boot-disk-size=10GB \
+  --image-family ubuntu-1604-lts \
+  --image-project=ubuntu-os-cloud \
+  --machine-type=g1-small \
+  --tags puma-server \
+  --restart-on-failure
+
 packer build -var 'project_id=aaaa-123' packer_example.json
 packer build -var-file variables.json packer_example.json
+PACKER_LOG=1 packer build -var-file=variables.json ubuntu16.json
 packer validate -var 'project_id=aaaa-123' packer_example.json
 packer inspect packer_example.json
+packer validate ./ubuntu16.json
+packer build ubuntu16.json
 
 terraform help
 terraform init
@@ -155,14 +174,16 @@ ansible-playbook reddit_app.yml --check --limit db
 ansible-playbook reddit_app2.yml --tags deploy-tag
 ansible-playbook -i path/to/inventories main.yml
 ansible-playbook site.yml
+ansible-playbook -i "35.205.202.166," -u appuser ansible/packer_db.yml
+ANSIBLE_ENABLE_TASK_DEBUGGER=True ansible-playbook -i hosts site.yml
+ansible-playbook main.yml --step
 ansible-vault --vault-id dev@prompt encrypt --encrypt-vault-id dev secrets.yml
 ansible-playbook myplaybook.yml --ask-vault-pass
 ansible -m ping localhost -vvvv
 ansible-console -l balancer
-ANSIBLE_ENABLE_TASK_DEBUGGER=True ansible-playbook -i hosts site.yml
-ansible-playbook main.yml --step
 ansible-inventory --list -i old/test.gcp.yml
 ./inventory.sh --list
+
 time sh -c 'cd ../terraform/stage && terraform destroy -auto-approve=true && terraform apply -auto-approve=true && cd ../../ansible && ansible-playbook site.yml'
 
 В дебаге ансибла (когда strategy: debug) https://docs.ansible.com/ansible/latest/user_guide/playbooks_debugger.html
